@@ -18,7 +18,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--pretrained', action='store_true',
                         help='bool value to indicate weather to use pretrained weight for encoder')
-    parser.add_argument('--dataset_path', default='E:\CutPaste-main\Data\screw/train')
+    parser.add_argument('--dataset_path', default='/kaggle/input/screwanomalies-detection/screw/train')
     #parser.add_argument('--dataset_path', help='path to trainset with category name, eg: "../data/MVTecAD/wood/train')
     parser.add_argument('--dims', default=[512, 512, 512, 512, 512, 512, 512, 512, 128],
                         help='list indicating number of hidden units for each layer of projection head')
