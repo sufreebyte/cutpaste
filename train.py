@@ -27,7 +27,7 @@ def get_args():
     parser.add_argument('--learning_rate', default=0.03)
     parser.add_argument('--momentum', default=0.9)
     parser.add_argument('--weight_decay', default=0.00003)
-    parser.add_argument('--num_epochs', default=300)
+    parser.add_argument('--num_epochs', default=60)
     parser.add_argument('--num_gpus', default=1)
     parser.add_argument('--batch_size', default=4, type=int)
     parser.add_argument('--input_size', default=256)
