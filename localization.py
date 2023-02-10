@@ -163,9 +163,9 @@ def save_anomaly_map(image, hmap, save_path):
 # heatmap_on_image('/media/lilityolyan/DATA/damage/mvtec/carpet/train', '/media/lilityolyan/DATA/damage/mvtec/carpet/test/hole/008.png', up)
 
 
-L = Localize('/kaggle/working/cutpaste/tb_logs\exp1/version_0\checkpoints\weights-screw.ckpt')
-sp = L.patch_scores('/kaggle/input/screwanomalies-detection/screw/train', '/kaggle/input/screwanomalies-detection/screw/test\scratch_head/001.png')
+L = Localize('/kaggle/working/cutpaste/tb_logs/exp1/version_0/checkpoints/weights-screw.ckpt')
+sp = L.patch_scores('/kaggle/input/screwanomalies-detection/screw/train', '/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png')
 GS = Gaussian_smoothing()
 up = GS.upsample(sp)
 #heatmap_on_image('E:\CutPaste-main\Data\screw/test\scratch_head/001.png', 'E:\CutPaste-main\Data\screw/test\scratch_head/001.png')
-save_anomaly_map('/kaggle/input/screwanomalies-detection/screw/test\scratch_head/001.png', '/kaggle/input/screwanomalies-detection/screw/test\scratch_head/001.png', '/kaggle/working/cutpaste/')
+save_anomaly_map('/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png', '/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png', '/kaggle/working/cutpaste/')
