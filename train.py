@@ -18,8 +18,8 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--pretrained', action='store_true',
                         help='bool value to indicate weather to use pretrained weight for encoder')
-    parser.add_argument('--dataset_path', default='/kaggle/input/screwanomalies-detection/screw/train')
-    #parser.add_argument('--dataset_path', help='path to trainset with category name, eg: "../data/MVTecAD/wood/train')
+    #parser.add_argument('--dataset_path', default='/kaggle/input/screwanomalies-detection/screw/train')
+    parser.add_argument('--dataset_path', help='path to trainset with category name, eg: "../data/MVTecAD/wood/train')
     parser.add_argument('--dims', default=[512, 512, 512, 512, 512, 512, 512, 512, 128],
                         help='list indicating number of hidden units for each layer of projection head')
     parser.add_argument('--num_class', default=3)
@@ -27,7 +27,7 @@ def get_args():
     parser.add_argument('--learning_rate', default=0.03)
     parser.add_argument('--momentum', default=0.9)
     parser.add_argument('--weight_decay', default=0.00003)
-    parser.add_argument('--num_epochs', default=60)
+    parser.add_argument('--num_epochs', default=300)
     parser.add_argument('--num_gpus', default=1)
     parser.add_argument('--batch_size', default=4, type=int)
     parser.add_argument('--input_size', default=256)
