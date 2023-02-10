@@ -23,7 +23,9 @@ class Localize:
         self.device = device
         self.transform =  transforms.Compose([transforms.Resize(image_size),
                                              transforms.ToTensor(),
+                                             transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
                                              transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                                              #transforms.Normalize([0.485,], [0.229, ])
                                              ])
 
     def extract_image_patches(self,image):
@@ -122,10 +124,18 @@ class Gaussian_smoothing:
 
 def heatmap_on_image(image, hmap):
     img = cv2.imread(image)
-    img = cv2.resize(img, (256,256), interpolation = cv2.INTER_AREA)
-    hmap = hmap.squeeze(0).squeeze(0)
-    hmap = np.expand_dims(hmap, axis=2)
-    hmap = np.uint8(hmap)
+    img = cv2.resize(img, (256, 256), interpolation=cv2.INTER_AREA)
+    transform = transforms.Compose([
+       # transforms.Resize(256, 256),
+        transforms.ToTensor(),
+       # transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+    ])
+    hmap = cv2.imread(hmap)
+    hmap = cv2.resize(hmap, (256, 256), interpolation=cv2.INTER_AREA)
+    # hmap = Image.open(hmap)
+    # hmap = transform(hmap).squeeze(0).squeeze(0)
+    # hmap = np.expand_dims(hmap, axis=2)
+    # hmap = np.uint8(hmap)
     heatmap_img = cv2.applyColorMap(hmap, cv2.COLORMAP_JET)
     fin = cv2.addWeighted(heatmap_img, 0.7, img, 0.3, 0)
     return fin
@@ -143,11 +153,19 @@ def save_anomaly_map(image, hmap, save_path):
 # sp = L.patch_scores('./bottle/train/', './bottle/test/broken_large/004.png')
 # GS = Gaussian_smoothing()
 # up = GS.upsample(sp)
-# visualize_heatmap('./bottle/test/broken_large/004.png', up)
+#visualize_heatmap('./bottle/test/broken_large/004.png', up)
 
 
-L = Localize('/home/lilityolyan/stuff/cutpaste/tb_logs_3way/carpet/version_0/checkpoints/weights.ckpt')
-sp = L.patch_scores('/media/lilityolyan/DATA/damage/mvtec/carpet/train', '/media/lilityolyan/DATA/damage/mvtec/carpet/test/hole/008.png')
+# L = Localize('/home/lilityolyan/stuff/cutpaste/tb_logs_3way/carpet/version_0/checkpoints/weights.ckpt')
+# sp = L.patch_scores('/media/lilityolyan/DATA/damage/mvtec/carpet/train', '/media/lilityolyan/DATA/damage/mvtec/carpet/test/hole/008.png')
+# GS = Gaussian_smoothing()
+# up = GS.upsample(sp)
+# heatmap_on_image('/media/lilityolyan/DATA/damage/mvtec/carpet/train', '/media/lilityolyan/DATA/damage/mvtec/carpet/test/hole/008.png', up)
+
+
+L = Localize('/kaggle/working/cutpaste/tb_logs\exp1/version_0\checkpoints\weights-screw.ckpt')
+sp = L.patch_scores('/kaggle/input/screwanomalies-detection/screw/train', '/kaggle/input/screwanomalies-detection/screw/test\scratch_head/001.png')
 GS = Gaussian_smoothing()
 up = GS.upsample(sp)
-heatmap_on_image('/media/lilityolyan/DATA/damage/mvtec/carpet/train', '/media/lilityolyan/DATA/damage/mvtec/carpet/test/hole/008.png', up)
+#heatmap_on_image('E:\CutPaste-main\Data\screw/test\scratch_head/001.png', 'E:\CutPaste-main\Data\screw/test\scratch_head/001.png')
+save_anomaly_map('/kaggle/input/screwanomalies-detection/screw/test\scratch_head/001.png', '/kaggle/input/screwanomalies-detection/screw/test\scratch_head/001.png', '/kaggle/working/cutpaste/')

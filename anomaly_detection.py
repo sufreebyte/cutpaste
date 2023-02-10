@@ -20,9 +20,11 @@ import pathlib
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path_to_checkpoints',
-                        help='path to the folder where results from self-supervised are saved, eg: ./tb_logs')
-    parser.add_argument('--data', help='path to MVTec dataset root.')
+#    parser.add_argument('--path_to_checkpoints',
+#                        help='path to the folder where results from self-supervised are saved, eg: ./tb_logs')
+    parser.add_argument('--path_to_checkpoints', default='/kaggle/working/cutpaste/tb_logs')
+    parser.add_argument('--data', default='/kaggle/input/screwanomalies-detection')
+#    parser.add_argument('--data', help='path to MVTec dataset root.')
     parser.add_argument('--batch_size', default=32)
     parser.add_argument('--save_exp', default=pathlib.Path(__file__).parent/'anomaly_exp', help = 'Save fitted models and roc curves')
     args = parser.parse_args()
@@ -210,7 +212,10 @@ if __name__ == '__main__':
 
     for defect in glob(os.path.join(args.data, '*')):
         defect_name = os.path.split(defect)[-1]
-        checkpoint = [i for i in all_checkpoints if defect_name == i.parts[-4]]
+        defect_name1 = 'weights-' + defect_name + '.ckpt'
+        checkpoint = [i for i in all_checkpoints if defect_name1 == i.parts[-1]]
+        for i in all_checkpoints:
+            b=i.parts[-4]
         if not checkpoint:
             continue
         else:
