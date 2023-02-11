@@ -13,7 +13,7 @@ from scipy import signal
 import torchvision.transforms as transforms
 import cv2
 import shutil
-
+import argparse
 class Localize:
     def __init__(self, model_weights, kernel_dim = (32,32), stride = 4, batch_size = 128, device = 'cuda', image_size = (256,256)):
         self.kernel_dim = kernel_dim
@@ -147,6 +147,17 @@ def save_anomaly_map(image, hmap, save_path):
     shutil.copy(image, os.path.join(save_path, f'{file_name}.jpg'))
     cv2.imwrite(os.path.join(save_path, f'{file_name}_amap.jpg'), imposed_image)
 
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--path_to_checkpoints_ckpt',default='/kaggle/working/cutpaste/tb_logs/exp1/version_0/checkpoints/weights-screw.ckpt',
+                        help='path to the folder where results from self-supervised are saved, eg: ./tb_logs')
+#    parser.add_argument('--path_to_checkpoints', default='/kaggle/working/cutpaste/tb_logs')
+#    parser.add_argument('--data', default='/kaggle/input/screwanomalies-detection')
+    parser.add_argument('--path_to_train', help='path to MVTec dataset root.',default='/kaggle/input/screwanomalies-detection/screw/train')
+    parser.add_argument('--path_to_test_juti', help='path to MVTec dataset root.',default='/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png')
+    parser.add_argument('--path_to_save', help='path to MVTec dataset root.',default='/kaggle/working/cutpaste/')
+    args = parser.parse_args()
+    return args
 
 
 # L = Localize('./weights-bottle.ckpt')
@@ -162,10 +173,21 @@ def save_anomaly_map(image, hmap, save_path):
 # up = GS.upsample(sp)
 # heatmap_on_image('/media/lilityolyan/DATA/damage/mvtec/carpet/train', '/media/lilityolyan/DATA/damage/mvtec/carpet/test/hole/008.png', up)
 
+if __name__ == '__main__':
+    # from icecream import ic
+    args = get_args()
 
-L = Localize('/kaggle/working/cutpaste/tb_logs/exp1/version_0/checkpoints/weights-screw.ckpt')
-sp = L.patch_scores('/kaggle/input/screwanomalies-detection/screw/train', '/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png')
-GS = Gaussian_smoothing()
-up = GS.upsample(sp)
-#heatmap_on_image('E:\CutPaste-main\Data\screw/test\scratch_head/001.png', 'E:\CutPaste-main\Data\screw/test\scratch_head/001.png')
-save_anomaly_map('/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png', '/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png', '/kaggle/working/cutpaste/')
+# L = Localize('/kaggle/working/cutpaste/tb_logs/exp1/version_0/checkpoints/weights-screw.ckpt')
+# sp = L.patch_scores('/kaggle/input/screwanomalies-detection/screw/train', '/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png')
+# GS = Gaussian_smoothing()
+# up = GS.upsample(sp)
+# #heatmap_on_image('E:\CutPaste-main\Data\screw/test\scratch_head/001.png', 'E:\CutPaste-main\Data\screw/test\scratch_head/001.png')
+# save_anomaly_map('/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png', '/kaggle/input/screwanomalies-detection/screw/test/scratch_head/001.png', '/kaggle/working/cutpaste/')
+
+
+    L = Localize('args.path_to_checkpoints_ckpt')
+    sp = L.patch_scores('args.path_to_train', 'args.path_to_test_juti')
+    GS = Gaussian_smoothing()
+    up = GS.upsample(sp)
+    #heatmap_on_image('E:\CutPaste-main\Data\screw/test\scratch_head/001.png', 'E:\CutPaste-main\Data\screw/test\scratch_head/001.png')
+    save_anomaly_map('args.path_to_test_juti', 'args.path_to_test_juti', 'path_to_save')
