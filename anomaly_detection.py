@@ -20,11 +20,11 @@ import pathlib
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path_to_checkpoints',default='/kaggle/working/cutpaste/tb_logs',
+    parser.add_argument('--path_to_checkpoints',
                         help='path to the folder where results from self-supervised are saved, eg: ./tb_logs')
 #    parser.add_argument('--path_to_checkpoints', default='/kaggle/working/cutpaste/tb_logs')
 #    parser.add_argument('--data', default='/kaggle/input/mvtec-ad')
-    parser.add_argument('--data',default='/kaggle/input/mvtec-ad',help='path to MVTec dataset root.')
+    parser.add_argument('--data',help='path to MVTec dataset root.')
     parser.add_argument('--batch_size', default=32)
     parser.add_argument('--save_exp', default=pathlib.Path(__file__).parent/'anomaly_exp', help = 'Save fitted models and roc curves')
     args = parser.parse_args()
