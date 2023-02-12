@@ -23,7 +23,7 @@ def get_args():
     parser.add_argument('--path_to_checkpoints',
                         help='path to the folder where results from self-supervised are saved, eg: ./tb_logs')
 #    parser.add_argument('--path_to_checkpoints', default='/kaggle/working/cutpaste/tb_logs')
-#    parser.add_argument('--data', default='/kaggle/input/screwanomalies-detection')
+#    parser.add_argument('--data', default='/kaggle/input/mvtec-ad')
     parser.add_argument('--data', help='path to MVTec dataset root.')
     parser.add_argument('--batch_size', default=32)
     parser.add_argument('--save_exp', default=pathlib.Path(__file__).parent/'anomaly_exp', help = 'Save fitted models and roc curves')
@@ -210,16 +210,24 @@ if __name__ == '__main__':
     args = get_args()
     all_checkpoints = sorted(pathlib.Path(args.path_to_checkpoints).glob("*/*/*/*.ckpt")) # ./tb_logs
 
+
     for defect in glob(os.path.join(args.data, '*')):
         defect_name = os.path.split(defect)[-1]
-        defect_name1 = 'weights-' + defect_name + '.ckpt'
-        checkpoint = [i for i in all_checkpoints if defect_name1 == i.parts[-1]]
-        for i in all_checkpoints:
-            b=i.parts[-4]
+        checkpoint = [i for i in all_checkpoints if defect_name == i.parts[6].split(".")[0]]
         if not checkpoint:
             continue
         else:
             checkpoint: str = checkpoint[0]
+    # for defect in glob(os.path.join(args.data, '*')):
+    #     defect_name = os.path.split(defect)[-1]
+    #     defect_name1 = 'weights-' + defect_name + '.ckpt'
+    #     checkpoint = [i for i in all_checkpoints if defect_name1 == i.parts[-1]]
+    #     for i in all_checkpoints:
+    #         b=i.parts[-4]
+    #     if not checkpoint:
+    #         continue
+    #     else:
+    #         checkpoint: str = checkpoint[0]
         # ic(defect_name, checkpoint)
 
         anomaly = AnomalyDetection(checkpoint, args.batch_size)

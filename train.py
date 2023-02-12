@@ -117,8 +117,10 @@ class CutPaste(pl.LightningModule):
 if __name__ == "__main__":
     args = get_args()
     # change default checkpoint_filename: "weights" to "weights-<defect name>"
-    NAME_CKPT = args.checkpoint_filename + "-" + Path(
+    NAME_CKPT = Path(
         args.dataset_path).parent.stem if args.checkpoint_filename == "weights" else args.checkpoint_filename
+    # NAME_CKPT = args.checkpoint_filename + "-" + Path(
+    #     args.dataset_path).parent.stem if args.checkpoint_filename == "weights" else args.checkpoint_filename
     logger = TensorBoardLogger(args.log_dir, name=args.log_dir_name)
     checkpoint_dir = (
             Path(logger.save_dir)
